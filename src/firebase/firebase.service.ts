@@ -4,6 +4,7 @@ import { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import { CreateRequest } from 'firebase-admin/lib/auth/auth-config';
 import { FirebaseConfigService } from './firebase-config.service';
 import axios from 'axios';
+import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
 @Injectable()
 export class FirebaseService {
@@ -16,6 +17,10 @@ export class FirebaseService {
 
     async createUser (props: CreateRequest): Promise<UserRecord> {
         return await firebaseAdmin.auth().createUser(props);
+    }
+
+    async verifyIdToken(token: string): Promise<DecodedIdToken> {
+        return await firebaseAdmin.auth().verifyIdToken(token);
     }
 
     async signInWithEmailAndPassword(email: string, password: string) {
