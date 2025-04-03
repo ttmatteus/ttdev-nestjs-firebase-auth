@@ -89,6 +89,34 @@ export class FirebaseService {
     throw new Error(error.message);
   }
 
+  async sendPasswordResetEmail(email: string) {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${this.apiKey}`;
+    const payload = {
+      requestType: 'PASSWORD_RESET',
+      email,
+    };
+
+    return await this.sendPostRequest(url, payload).catch(this.handleRestApiError);
+  }
+
+  async generatePasswordResetLink(email: string) {
+    return await firebaseAdmin
+      .auth()
+      .generatePasswordResetLink(email)
+      .catch(this.handleFirebaseAuthError);
+  }
+
+  async confirmPasswordReset(oobCode: string, newPassword: string) {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=${this.apiKey}`;
+    const payload = {
+      oobCode,
+      newPassword,
+    };
+    return await this.sendPostRequest(url, payload).catch(
+      this.handleFirebaseAuthError,
+    )
+  }
+
   private handleRestApiError(error: any) {
     if (error.response?.data?.error?.code === 400) {
       const messageKey = error.response?.data?.error?.message;

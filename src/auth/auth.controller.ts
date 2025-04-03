@@ -5,6 +5,9 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 import { AuthGuard } from "./auth.guard";
 import { IdToken } from "./id-token.decorator";
 import { RefreshTokenDto } from "./dtos/refresh-token.dto";
+import { sendPasswordResetEmailDto } from "./dtos/send-password-reset-email.dto";
+import { GeneratePaswordResetLinkDto } from "./dtos/generate-password-reset-link.dto";
+import { ConfirmPasswordResetDto } from "./dtos/confirm-password-reset.dto";
 
 
 
@@ -30,5 +33,22 @@ export class AuthController {
     @HttpCode(200)
     refreshAuth(@Body() dto: RefreshTokenDto) {
         return this.authService.refreshAuthToken(dto.refreshToken);
+    }
+
+    @Post('send-password-reset-email')
+    @HttpCode(204)
+    sendPasswordResetEmail(@Body() dto: sendPasswordResetEmailDto) {
+        return this.authService.sendPasswordResetEmail(dto.email)
+    }
+
+    @Post('generate-password-reset-link')
+    generatePasswordResetLink(@Body() dto: GeneratePaswordResetLinkDto) {
+        return this.authService.generatePasswordResetLink(dto.email);
+    }
+
+    @Post('confirm-password-reset')
+    @HttpCode(204)
+    confirmPasswordReset(@Body() dto: ConfirmPasswordResetDto) {
+        return this.authService.confirmPasswordReset(dto.oobCode, dto.newPassword);
     }
 }

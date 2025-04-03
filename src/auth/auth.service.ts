@@ -20,4 +20,17 @@ export class AuthService {
   async refreshAuthToken(refreshToken: string) {
     return await this.firebaseService.refreshAuthToken(refreshToken);
   }
+
+  async sendPasswordResetEmail(email: string) {
+    return await this.firebaseService.sendPasswordResetEmail(email)
+  }
+
+  async generatePasswordResetLink(email: string) {
+    return await this.firebaseService.generatePasswordResetLink(email);
+  }
+
+  async confirmPasswordReset(oobCode: string, newPassword: string ) {
+    await this.firebaseService.confirmPasswordReset(oobCode, newPassword);
+  }
+
 }
